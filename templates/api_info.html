@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}API haqida ma'lumot{% endblock %}
+
+{% block content %}
+<section style="margin-top: 22px;" class="api-section">
+
+    <!-- Yuqori qisqa overview -->
+    <div class="card api-header-card">
+        <h1 class="card-title">Fraud Monitoring API</h1>
+        <p class="card-note" style="margin-top:6px;">
+            Ushbu xizmat bank tranzaksiyalarini onlayn monitoring qilish, xavf darajasini
+            baholash va firibgarlik ehtimoli yuqori bo‘lgan operatsiyalarni ajratib ko‘rsatish
+            uchun mo‘ljallangan. API REST-standartlar asosida JSON formatda ishlaydi va
+            bank tizimlariga bevosita integratsiya qilishga tayyor.
+        </p>
+    </div>
+
+    <!-- 3 ta kengaytirilgan kartalar -->
+    <div class="api-grid">
+        <!-- Asosiy xususiyatlar -->
+        <div class="card api-card">
+            <h2 class="api-card-title">Asosiy xususiyatlar</h2>
+            <div class="api-features">
+                <div class="api-feature">
+                    <div class="api-feature-title">Real-time risk baholash</div>
+                    <div class="api-feature-desc">
+                        Har bir tranzaksiya kelishi bilanoq risk balli hisoblanadi va
+                        natija onlayn rejimda qaytariladi. Xizmat operatsion jarayonlarga
+                        sezilarli kechikish kiritmaslik uchun optimallashtirilgan.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Risk ball va toifalar</div>
+                    <div class="api-feature-desc">
+                        Model 0 dan 1 gacha bo‘lgan <em>fraud ehtimoli</em>ni hisoblab,
+                        Low / Medium / High ko‘rinishidagi risk darajasini shakllantiradi.
+                        Bu operatsiyalarni prioritetlashtirishni osonlashtiradi.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Moslashuvchan threshold</div>
+                    <div class="api-feature-desc">
+                        Bank ichki siyosatiga qarab turli xizmatlar uchun turlicha threshold
+                        qiymatini qo‘llash mumkin. Demo rejimida threshold parametr sifatida
+                        yuboriladi va dinamik boshqariladi.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Audit va kuzatuvga tayyorlik</div>
+                    <div class="api-feature-desc">
+                        So‘rov va javoblarni loglarda saqlash orqali keyinchalik tahlil qilish,
+                        audit va sifat nazoratini olib borish imkoniyati mavjud. Bu jarayon
+                        compliance va risk bo‘limlari uchun qulaylik yaratadi.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integratsiya formati -->
+        <div class="card api-card">
+            <h2 class="api-card-title">Integratsiya formati</h2>
+            <div class="api-features">
+                <div class="api-feature">
+                    <div class="api-feature-title">RESTful HTTP interfeys</div>
+                    <div class="api-feature-desc">
+                        Xizmat standart HTTP metodlari asosida ishlaydi.
+                        Mavjud core banking tizimlari, mobil ilovalar va boshqa backend
+                        xizmatlar bilan integratsiya qilish oson.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">JSON ma'lumot almashinuvi</div>
+                    <div class="api-feature-desc">
+                        Kiruvchi so‘rov va javoblar JSON formatida uzatiladi.
+                        Bu turli texnologiyalardagi mijoz tizimlari bilan moslashuvchan
+                        ma'lumot almashish imkonini beradi.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Kontekstga mos maydonlar</div>
+                    <div class="api-feature-desc">
+                        Tranzaksiya turi, miqdori, jo‘natuvchi va oluvchining balans
+                        ma'lumotlari kabi maydonlar alohida uzatiladi. Bu modelga
+                        to‘liqroq kontekst berib, aniqroq baholash imkonini yaratadi.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Muhitlarga bo‘lingan ulanish</div>
+                    <div class="api-feature-desc">
+                        Konsepsiya jihatidan alohida test va ishlab chiqarish muhitlari
+                        bilan ishlashga tayyor: dastlab sinov muhiti orqali integratsiya
+                        qilinib, keyinchalik prod muhiti bilan bog‘lash mumkin.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Qo'llab-quvvatlanadigan operatsiyalar -->
+        <div class="card api-card">
+            <h2 class="api-card-title">Qo‘llab-quvvatlanadigan operatsiyalar</h2>
+            <div class="api-features">
+                <div class="api-feature">
+                    <div class="api-feature-title">Onlayn tranzaksiya baholash</div>
+                    <div class="api-feature-desc">
+                        Har bir tranzaksiya alohida so‘rov sifatida yuborilib, risk balli
+                        va model qarori qaytariladi. Integratsiya qismida ushbu natijaga
+                        qarab avtomatik bloklash yoki qo‘shimcha tekshiruvni ishga tushirish
+                        mumkin.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Xizmat holatini monitoring qilish</div>
+                    <div class="api-feature-desc">
+                        Health endpoint yordamida xizmatning joriy ishlash holatini
+                        kuzatish, ularni monitoring tizimlariga ulash va avtomatik
+                        ogohlantirish mexanizmlarini tashkil qilish osonlashadi.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Servis meta ma'lumotlari</div>
+                    <div class="api-feature-desc">
+                        Meta endpoint versiya, qo‘llab-quvvatlanadigan tranzaksiya turlari
+                        va qisqacha tavsifni qaytaradi. Bu integratsiya jarayonida
+                        hujjatlashtirishni soddalashtiradi.
+                    </div>
+                </div>
+
+                <div class="api-feature">
+                    <div class="api-feature-title">Kengaytirish imkoniyatlari</div>
+                    <div class="api-feature-desc">
+                        Arxitektura kelgusida qo‘shimcha operatsiyalar, masalan, statistik
+                        hisobotlar, qo‘shimcha monitoring parametrlar yoki boshqa servislar
+                        bilan integratsiyani qo‘shish imkoniyatini nazarda tutadi.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endpointlar jadvali (kodsiz, faqat tavsif) -->
+    <div class="card api-endpoints-card">
+        <h2 class="card-title">Endpointlar ro‘yxati</h2>
+        <table class="endpoint-table">
+            <thead>
+                <tr>
+                    <th>Endpoint nomi</th>
+                    <th>Manzil</th>
+                    <th>Metod</th>
+                    <th>Vazifasi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Health check</td>
+                    <td><code>/health</code></td>
+                    <td>GET</td>
+                    <td>Xizmatning ishlash holatini tekshirish</td>
+                </tr>
+                <tr>
+                    <td>Servis ma'lumotlari</td>
+                    <td><code>/meta</code></td>
+                    <td>GET</td>
+                    <td>Versiya, tranzaksiya turlari va qisqacha tavsifni qaytaradi</td>
+                </tr>
+                <tr>
+                    <td>Fraud risk baholash</td>
+                    <td><code>/predict</code></td>
+                    <td>POST</td>
+                    <td>Tranzaksiya ma'lumotlari asosida risk darajasi va ehtimolini qaytaradi</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Statistika / diagramma blok (vizual ko‘rinish) -->
+    <div class="api-stats-grid">
+        <div class="card stat-card">
+            <h3 class="api-card-title">Javob muvaffaqiyati</h3>
+            <p class="stat-label">Muvaffaqiyatli qayta ishlangan so‘rovlar ulushi</p>
+            <div class="stat-bar">
+                <div class="stat-bar-fill stat-ok" style="width: 98%;"></div>
+            </div>
+            <p class="stat-value">Tizim odatda so‘rovlarning katta qismini muvaffaqiyatli qayta ishlaydi.</p>
+        </div>
+
+        <div class="card stat-card">
+            <h3 class="api-card-title">O‘rtacha kechikish</h3>
+            <p class="stat-label">Backend javob vaqti (namunaviy muhitda)</p>
+            <div class="stat-bar">
+                <div class="stat-bar-fill stat-latency" style="width: 35%;"></div>
+            </div>
+            <p class="stat-value">Odatda javob vaqti &lt; 200 ms diapazonda bo‘lishi ko‘zda tutilgan.</p>
+        </div>
+
+        <div class="card stat-card">
+            <h3 class="api-card-title">Fraud aniqlash ko‘rsatkichi</h3>
+            <p class="stat-label">High-risk sifatida belgilangan tranzaksiyalar ulushi</p>
+            <div class="stat-bar">
+                <div class="stat-bar-fill stat-risk" style="width: 22%;"></div>
+            </div>
+            <p class="stat-value">
+                Xizmat xavfi yuqori bo‘lgan operatsiyalarni alohida ajratib ko‘rsatish
+                uchun mo‘ljallangan bo‘lib, bu operatsion jamoaga tezkor reaksiya berish
+                imkonini yaratadi.
+            </p>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

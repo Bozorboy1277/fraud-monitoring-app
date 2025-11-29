@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}Fraud Detection{% endblock %}</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Google Fonts (modern, clean UI) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Scrollbar elegant ko‘rinishi */
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Header -->
+    <header style="padding:15px 0; background:#0f172a; border-bottom:1px solid #1e293b;">
+        <div class="wrapper" style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 style="margin:0; font-size:20px; font-weight:600;">🛡 AI Fraud Detection</h2>
+
+            <nav class="top-nav">
+    <a href="{{ url_for('index') }}"
+       class="nav-link {% if request.endpoint in ['index', 'ui_predict'] %}nav-link-active{% endif %}">
+        Bosh sahifa
+    </a>
+
+    <a href="{{ url_for('api_info_page') }}"
+       class="nav-link {% if request.endpoint == 'api_info_page' %}nav-link-active{% endif %}">
+        API info
+    </a>
+
+    <a href="{{ url_for('health_page') }}"
+       class="nav-link {% if request.endpoint == 'health_page' %}nav-link-active{% endif %}">
+        Health
+    </a>
+</nav>
+
+        </div>
+    </header>
+
+    <!-- Main UI Content -->
+    <main class="wrapper" style="padding-bottom:40px; min-height:80vh;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align:center; padding:15px 0; color:#64748b;">
+        © 2025 Fraud Detection System | Agrobank Hackathon
+    </footer>
+
+</body>
+</html>

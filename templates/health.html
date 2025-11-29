@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Xizmat holati{% endblock %}
+
+{% block content %}
+<section class="health-section" style="margin-top: 22px;">
+
+    <!-- Asosiy status panel -->
+    <div class="card health-main-card">
+        <div class="health-main-header">
+            <div>
+                <h1 class="card-title">Tizim holati va monitoring</h1>
+                <p class="card-note" style="margin-top:4px;">
+                    Bu sahifada fraud monitoring xizmatining joriy ishlash holati,
+                    asosiy ko‘rsatkichlari va komponentlar bo‘yicha statuslar ko‘rsatiladi.
+                </p>
+            </div>
+
+            <div class="health-status-badge">
+                <span class="health-status-dot"></span>
+                <span class="health-status-text">Xizmat faol</span>
+            </div>
+        </div>
+
+        <div class="health-summary-grid">
+            <div class="summary-item">
+                <span class="summary-label">Oxirgi tekshiruv</span>
+                <span class="summary-value">{{ last_check }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Joriy status</span>
+                <span class="summary-value">Online</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Monitoring rejimi</span>
+                <span class="summary-value">Demo / Test muhiti</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ko'rsatkichlar (bar diagrammalar) -->
+    <div class="health-metrics-grid">
+        <div class="card stat-card">
+            <h3 class="api-card-title">Tizim ish vaqti</h3>
+            <p class="stat-label">Xizmatning to‘xtamasdan ishlagan davri</p>
+            <div class="stat-bar">
+                <div class="stat-bar-fill stat-ok" style="width: 92%;"></div>
+            </div>
+            <p class="stat-value">≈ 92% davomiy ish vaqti (demo muhiti uchun)</p>
+        </div>
+
+        <div class="card stat-card">
+            <h3 class="api-card-title">O‘rtacha javob vaqti</h3>
+            <p class="stat-label">So‘nggi so‘rovlar bo‘yicha API javob kechikishi</p>
+            <div class="stat-bar">
+                <div class="stat-bar-fill stat-latency" style="width: 40%;"></div>
+            </div>
+            <p class="stat-value">&lt; 250 ms o‘rtacha javob vaqti</p>
+        </div>
+
+        <div class="card stat-card">
+            <h3 class="api-card-title">Xatoliklar ulushi</h3>
+            <p class="stat-label">Noto‘liq / noto‘g‘ri so‘rovlar soni</p>
+            <div class="stat-bar">
+                <div class="stat-bar-fill stat-risk" style="width: 8%;"></div>
+            </div>
+            <p class="stat-value">&lt; 10% noto‘g‘ri so‘rovlar (input formatiga bog‘liq)</p>
+        </div>
+    </div>
+
+    <!-- Komponentlar bo'yicha status jadvali -->
+    <div class="card health-components-card">
+        <h2 class="card-title">Komponentlar bo‘yicha holat</h2>
+        <table class="component-table">
+            <thead>
+                <tr>
+                    <th>Komponent</th>
+                    <th>Holat</th>
+                    <th>Izoh</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>API gateway</td>
+                    <td><span class="status-pill status-ok">Faol</span></td>
+                    <td>So‘rovlarni qabul qilish va javoblarni qaytarish</td>
+                </tr>
+                <tr>
+                    <td>Fraud scoring xizmati</td>
+                    <td><span class="status-pill status-ok">Faol</span></td>
+                    <td>Tranzaksiya ma'lumotlari asosida risk baholash</td>
+                </tr>
+                <tr>
+                    <td>Ma'lumotlar qatlami</td>
+                    <td><span class="status-pill status-warn">Demo rejim</span></td>
+                    <td>Real vaqt rejimida test ma'lumotlar bilan ishlamoqda</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Kiberxavfsizlik vizuallari -->
+    <div class="card security-visual-card">
+        <div class="security-visual-text">
+            <h2 class="card-title">Kiberxavfsizlik monitoringi</h2>
+            <p class="card-note" style="margin-top:4px;">
+                Fraud monitoring xizmati nafaqat tranzaksiyalarni baholaydi, balki
+                xavfsizlik ko‘rsatkichlarini ham muntazam kuzatib borish uchun
+                moslashtirilgan. Quyidagi vizual indikatorlar autentifikatsiya,
+                monitoring va jurnalizatsiya darajasini ifodalaydi.
+            </p>
+
+            <ul class="security-list">
+                <li>Autentifikatsiya qatlamida foydalanuvchi va xizmatlar darajasida nazorat.</li>
+                <li>Monitoring tizimlari orqali xizmatning uzluksiz ishlashi ustidan kuzatuv.</li>
+                <li>Log va audit izlarini saqlash orqali keyingi tahlil imkoniyati.</li>
+            </ul>
+        </div>
+
+        <div class="security-gauges">
+            <div class="gauge">
+                <div class="gauge-ring gauge-auth">
+                    <div class="gauge-inner">
+                        <div class="gauge-value">85%</div>
+                        <div class="gauge-label">Autentifikatsiya</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gauge">
+                <div class="gauge-ring gauge-monitor">
+                    <div class="gauge-inner">
+                        <div class="gauge-value">72%</div>
+                        <div class="gauge-label">Monitoring</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gauge">
+                <div class="gauge-ring gauge-logging">
+                    <div class="gauge-inner">
+                        <div class="gauge-value">64%</div>
+                        <div class="gauge-label">Log va audit</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
