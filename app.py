@@ -309,9 +309,15 @@ def create_app() -> Flask:
     return app
 
 
+# ======== MUHIM QO‘SHIMCHA QATOR ========
+# Gunicorn (app:app) uchun global Flask instance:
+app = create_app()
+# ========================================
+
+
 # ================================================
 # 5. ENTRY POINT
 # ================================================
 if __name__ == "__main__":
-    app = create_app()
+    # Lokal rejimda ham xuddi shu app'ni ishlatamiz
     app.run(host="0.0.0.0", port=8000, debug=True)
