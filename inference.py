@@ -2,45 +2,39 @@ from __future__ import annotations
 
 import logging
 from typing import Dict, Any, List
+from dataclasses import dataclass
+import sys
 
 import numpy as np
 import pandas as pd
 from joblib import load
 from sklearn.ensemble import RandomForestClassifier
-from dataclasses import dataclass
 
-from dataclasses import dataclass
-from typing import Any, Dict
-import logging
-import os
-import sys  # ← QO‘SHILDI
 
-from joblib import load
-import numpy as np
-
-# ==== Joblib unpickling uchun dummy klass va patch ====
-@dataclass
-class TrainingConfig:
-    """Joblib modeli ichida saqlangan konfiguratsiya uchun stub klass."""
-    pass
-
-# Model saqlanganda __main__.TrainingConfig sifatida yozilgan bo‘lgani uchun,
-# hozirgi __main__ moduliga ham shu klassni qo‘shib qo‘yamiz.
-sys.modules["__main__"].TrainingConfig = TrainingConfig
-# ======================================================
+# =========================================================
+# 1. Joblib unpickling uchun TrainingConfig stub + patch
+# =========================================================
 
 @dataclass
 class TrainingConfig:
-    """Dummy class for loading pickled training_config.
-
-    Eslatma: Bu klass faqat joblib load paytida kerak bo'ladi.
-    Hamma real parametrlarga modelning o'zi javob beradi.
+    """
+    Joblib orqali saqlangan model ichida 'TrainingConfig' obyekti bor.
+    Bizga faqat unpickling paytida nomi kerak bo'ladi, shuning uchun
+    bo'sh stub klass kifoya.
     """
     pass
 
-# ----------------------
-# Logger sozlamalari
-# ----------------------
+
+# Model saqlanganda __main__.TrainingConfig sifatida yozilgan bo'lgan.
+# Lokalda __main__ = 'Untitled-1.py' bo'lgan, Renderda esa __main__ = 'gunicorn'.
+# Shuning uchun hozirgi __main__ moduliga ham TrainingConfig ni biriktirib qo'yamiz.
+sys.modules["__main__"].TrainingConfig = TrainingConfig
+
+
+# =========================================================
+# 2. Logger sozlamalari
+# =========================================================
+
 LOGGER = logging.getLogger("fraud_inference")
 LOGGER.setLevel(logging.INFO)
 
@@ -51,16 +45,18 @@ if not LOGGER.handlers:
     )
     LOGGER.addHandler(handler)
 
-# ----------------------
-# Global o'zgaruvchilar
-# ----------------------
+
+# =========================================================
+# 3. Global o'zgaruvchilar va mapping
+# =========================================================
+
 MODEL: RandomForestClassifier | None = None
 FEATURE_NAMES: List[str] = []
 
 MODEL_PATH = "rf_fraud_model.joblib"
 
-# Train fayldagi bilan bir xil mapping bo'lishi KERAK
-TYPE_MAP = {
+# Train kodida ishlatilgan mapping bilan BIR xil bo'lishi shart
+TYPE_MAP: Dict[str, int] = {
     "CASH_IN": 0,
     "CASH_OUT": 1,
     "DEBIT": 2,
@@ -69,28 +65,37 @@ TYPE_MAP = {
 }
 
 
+# =========================================================
+# 4. Modelni yuklash
+# =========================================================
+
 def load_model(model_path: str = MODEL_PATH) -> None:
     """
-    Joblib fayldan modelni va feature nomlarini yuklaydi.
+    Joblib fayldan model va feature nomlarini yuklaydi.
     """
     global MODEL, FEATURE_NAMES
 
-    LOGGER.info(f"Model yuklanmoqda: {model_path}")
+    LOGGER.info("Model yuklanmoqda: %s", model_path)
     bundle = load(model_path)
 
     MODEL = bundle["model"]
     FEATURE_NAMES = bundle.get("feature_names", [])
 
-    LOGGER.info("Model muvaffaqiyatli yuklandi. Feature soni: %d", len(FEATURE_NAMES))
+    LOGGER.info(
+        "Model muvaffaqiyatli yuklandi. Feature soni: %d",
+        len(FEATURE_NAMES),
+    )
 
+
+# =========================================================
+# 5. Feature tayyorlash (inference uchun)
+# =========================================================
 
 def prepare_features_inference(df: pd.DataFrame) -> pd.DataFrame:
     """
     Inference paytida xom tranzaksiyani train paytidagi bilan
     bir xil formatga keltiradi.
     """
-
-    # Keraksiz ustunlar (train dagi bilan bir xil bo'lsin)
     drop_cols = [
         "nameOrig",
         "nameDest",
@@ -103,14 +108,14 @@ def prepare_features_inference(df: pd.DataFrame) -> pd.DataFrame:
         if c in df.columns:
             df = df.drop(columns=[c])
 
-    # 'type' ni kodlash
+    # 'type' ni raqamga map qilish
     if "type" in df.columns:
         df["type"] = df["type"].map(TYPE_MAP).fillna(-1).astype("int8")
 
     # NaNlarni 0 bilan to'ldiramiz
     df = df.fillna(0)
 
-    # Raqamli ustunlarni float32 ga o'tkazamiz
+    # Raqamli ustunlarni float32 ga o'tkazamiz (tezroq va kamroq RAM)
     for col in df.columns:
         if pd.api.types.is_float_dtype(df[col]) or pd.api.types.is_integer_dtype(df[col]):
             df[col] = df[col].astype("float32")
@@ -120,7 +125,7 @@ def prepare_features_inference(df: pd.DataFrame) -> pd.DataFrame:
 
 def build_feature_frame(data: Dict[str, Any]) -> pd.DataFrame:
     """
-    kelgan dict'dan bitta qatorli DataFrame quradi va
+    Kelgan dict'dan bitta qatorli DataFrame quradi va
     train paytida ishlatilgan FEATURE_NAMES tartibiga moslashtiradi.
     """
     if MODEL is None or not FEATURE_NAMES:
@@ -142,6 +147,10 @@ def build_feature_frame(data: Dict[str, Any]) -> pd.DataFrame:
 
     return df
 
+
+# =========================================================
+# 6. Bashorat funksiyasi
+# =========================================================
 
 def predict_transaction(data: Dict[str, Any], threshold: float = 0.5) -> Dict[str, Any]:
     """
@@ -169,7 +178,9 @@ def predict_transaction(data: Dict[str, Any], threshold: float = 0.5) -> Dict[st
     pred = int(proba >= threshold)
 
     LOGGER.info(
-        f"Tranzaksiya baholandi. Fraud ehtimoli: {proba:.4f}, prediction: {pred}"
+        "Tranzaksiya baholandi. Fraud ehtimoli: %.4f, prediction: %d",
+        proba,
+        pred,
     )
 
     return {
@@ -178,9 +189,10 @@ def predict_transaction(data: Dict[str, Any], threshold: float = 0.5) -> Dict[st
     }
 
 
-# ----------------------
-# Tezkor test
-# ----------------------
+# =========================================================
+# 7. Tezkor lokal test
+# =========================================================
+
 if __name__ == "__main__":
     sample_tx = {
         "timestamp": 1.0,
@@ -197,4 +209,3 @@ if __name__ == "__main__":
 
     result = predict_transaction(sample_tx, threshold=0.5)
     print("Natija:", result)
-
