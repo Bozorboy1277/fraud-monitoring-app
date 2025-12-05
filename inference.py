@@ -9,6 +9,26 @@ from joblib import load
 from sklearn.ensemble import RandomForestClassifier
 from dataclasses import dataclass
 
+from dataclasses import dataclass
+from typing import Any, Dict
+import logging
+import os
+import sys  # ← QO‘SHILDI
+
+from joblib import load
+import numpy as np
+
+# ==== Joblib unpickling uchun dummy klass va patch ====
+@dataclass
+class TrainingConfig:
+    """Joblib modeli ichida saqlangan konfiguratsiya uchun stub klass."""
+    pass
+
+# Model saqlanganda __main__.TrainingConfig sifatida yozilgan bo‘lgani uchun,
+# hozirgi __main__ moduliga ham shu klassni qo‘shib qo‘yamiz.
+sys.modules["__main__"].TrainingConfig = TrainingConfig
+# ======================================================
+
 @dataclass
 class TrainingConfig:
     """Dummy class for loading pickled training_config.
